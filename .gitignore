@@ -1,0 +1,31 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python cache & build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Dynamic runtime screenshots and logs
+screenshots/*
+!screenshots/.gitkeep
+logs/*
+!logs/.gitkeep
+*.log
+
+# Playwright & browser sessions
+netflix_profile/
+test-results/
