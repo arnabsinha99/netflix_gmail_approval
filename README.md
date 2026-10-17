@@ -19,39 +19,42 @@ An automated Python script that connects to your Gmail, locates incoming Netflix
 
 ---
 
-## 📋 Prerequisites
+## 🛠️ Environment Setup
 
-- **Python 3.10+** (Tested on Python 3.13)
-- Required packages (already installed):
-  ```bash
-  pip install beautifulsoup4 playwright python-dotenv pytest
-  playwright install chromium
-  ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/arnabsinha99/netflix_gmail_approval.git
+cd netflix_gmail_approval
+```
 
----
+### 2. Create and Activate a Virtual Environment
+Using Python `venv` (recommended):
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+*(On Windows: `.venv\Scripts\activate`)*
 
-## 🔑 Setting Up Gmail Access (Google App Password)
+Or using Conda:
+```bash
+conda create -n netflix-auto python=3.13 -y
+conda activate netflix-auto
+```
 
-Gmail requires a 16-character **App Password** for automated scripts:
+### 3. Install Dependencies & Browser
+Install Python packages and the required Playwright Chromium browser:
+```bash
+pip install -r requirements.txt
+playwright install chromium
+```
 
-1. Go to your **Google Account Security** settings: [https://myaccount.google.com/security](https://myaccount.google.com/security)
-2. Ensure **2-Step Verification** is turned **ON**.
-3. Visit the **App Passwords** page: [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-4. Enter an app name (e.g., `Netflix Automation`) and click **Create**.
-5. Copy the generated 16-character code (e.g., `abcd efgh ijkl mnop`).
-
----
-
-## ⚙️ Configuration
-
+### 4. Configure Environment Variables
 Copy `.env.example` to `.env`:
-
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your credentials:
-
+Edit `.env` with your settings:
 ```ini
 # Your Gmail account
 GMAIL_EMAIL=your.email@gmail.com
@@ -63,10 +66,25 @@ EMAIL_SUBJECT=Important: How to update your Netflix household
 # Browser settings (true for background, false for visible window)
 HEADLESS=true
 
-# Mark as read once successfully processed
+# Operational Settings
 MARK_AS_READ=true
 POLL_INTERVAL=15
+SCREENSHOTS_DIR=screenshots
+LOGS_DIR=logs
+PURGE_DAYS=7
 ```
+
+---
+
+## 🔑 Setting Up Gmail Access (Google App Password)
+
+Gmail requires a 16-character **App Password** for automated scripts:
+
+1. Go to your **Google Account Security** settings: [https://myaccount.google.com/security](https://myaccount.google.com/security)
+2. Ensure **2-Step Verification** is turned **ON**.
+3. Visit the **App Passwords** page: [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+4. Enter an app name (e.g., `Netflix Automation`) and click **Create**.
+5. Copy the generated 16-character code (e.g., `abcd efgh ijkl mnop`) into `GMAIL_APP_PASSWORD` in your `.env` file.
 
 ---
 
