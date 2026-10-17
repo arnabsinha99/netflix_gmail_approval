@@ -146,17 +146,30 @@ Open your crontab:
 crontab -e
 ```
 
-Add the following line (using your absolute paths):
+Add the following entry using your project's absolute directory path and the `.venv` Python executable:
 
 ```cron
-*/2 * * * * cd /Users/arnab.s/Desktop/gmail_automation && /Users/arnab.s/miniconda3/bin/python3 main.py >/dev/null 2>&1
+*/2 * * * * cd /path/to/netflix_gmail_approval && ./.venv/bin/python main.py >/dev/null 2>&1
 ```
+
+#### Examples:
+* **Linux / EC2 Server**:
+  ```cron
+  */2 * * * * cd /home/ec2-user/arnab/netflix_gmail_approval && ./.venv/bin/python main.py >/dev/null 2>&1
+  ```
+* **macOS**:
+  ```cron
+  */2 * * * * cd /Users/arnab.s/Desktop/gmail_automation && ./.venv/bin/python main.py >/dev/null 2>&1
+  ```
+
+> [!TIP]
+> By invoking `./.venv/bin/python` directly, cron automatically uses the virtual environment's Python interpreter and all installed packages without needing to manually run `source .venv/bin/activate`.
 
 > [!NOTE]
 > * `*/2 * * * *` specifies execution every 2 minutes.
-> * `cd /Users/arnab.s/Desktop/gmail_automation` ensures the script finds `.env`, outputs screenshots to `screenshots/`, and creates timestamped log files in `logs/`.
+> * `cd /path/to/project` ensures the script finds `.env`, outputs screenshots to `screenshots/`, and creates timestamped log files in `logs/`.
 > * `main.py` runs a single check, purges old files, and exits immediately.
-> * `>/dev/null 2>&1` silences shell redirection because the code manages its own timestamped log files.
+> * `>/dev/null 2>&1` silences standard cron mail/shell redirection because the script manages its own timestamped log files in `logs/`.
 
 ### 3. Viewing Logs
 
