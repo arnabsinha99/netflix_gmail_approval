@@ -91,8 +91,7 @@ class GmailClient:
 
         self.mail.select("INBOX")
 
-        # Target "Netflix" in subject directly on IMAP server so we don't waste time
-        # downloading unrelated unread emails (like newsletters or promos).
+        # Target "Netflix" in subject directly on IMAP server
         if unread_only:
             search_criteria = ["UNSEEN", "SUBJECT", "Netflix"]
         else:
@@ -100,12 +99,8 @@ class GmailClient:
 
         status, response = self.mail.search(None, *search_criteria)
         if status != "OK" or not response or not response[0]:
-            # Fallback check: in case subject doesn't mention "Netflix", check UNSEEN / ALL
-            fallback_criteria = ["UNSEEN"] if unread_only else ["ALL"]
-            status, response = self.mail.search(None, *fallback_criteria)
-            if status != "OK" or not response or not response[0]:
-                logger.info(f"No messages found with criteria {search_criteria}.")
-                return []
+            logger.info("No matching Netflix emails found in inbox.")
+            return []
 
         message_ids = response[0].split()
         # Sort latest first
@@ -117,7 +112,10 @@ class GmailClient:
 
         for msg_id in message_ids:
             try:
-                res_code, msg_data = self.mail.fetch(msg_id, "(RFC822)")
+                # Use BODY.PEEK[] instead of RFC822!
+                # In the IMAP protocol, RFC822 or BODY[] implicitly marks the message as read (\Seen).
+                # BODY.PEEK[] fetches the message WITHOUT setting the \Seen flag.
+                res_code, msg_data = self.mail.fetch(msg_id, "(BODY.PEEK[])")
                 if res_code != "OK" or not msg_data or not msg_data[0]:
                     continue
 
